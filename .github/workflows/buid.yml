@@ -1,7 +1,16 @@
 name: Examenis Build Node Server
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy Environment: [prod]'
+        required: true
+        default: 'prod'
 
 jobs:
   build:
+    environment:
+      name: ${{ github.event.inputs.environment || 'prod' }}
     env:
       sshKey: ${{ secrets.EDO_JENKINS }}
       repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
