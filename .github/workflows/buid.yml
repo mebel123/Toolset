@@ -17,14 +17,8 @@ jobs:
     name: Build image
     runs-on: [ self-hosted, edo ]
     steps:
-      - name: checkout source code
+      - name: prepare keys
         run: |
+          echo "hello world"
           echo $sshKey > private_key_file
-      - name: checkout source code
-        run: |
-          ssh -i private_key_file -o IdentitiesOnly=yes' 
-          git clone $repository
-      - name: checkout source code
-        run: |
-          sh createDocker.sh
           
