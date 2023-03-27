@@ -12,18 +12,16 @@ jobs:
     environment:
       name: ${{ github.event.inputs.environment || 'prod' }}
     env:
-      sshKey: ${{ secrets.EDO_JENKINS }}
       repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
     name: Build image
     runs-on: [ self-hosted, edo ]
     steps:
-      - name: prepare keys
+      - name: prepare hello world
         run: |
           echo "hello world"
-          echo $sshKey > private_key_file
       - name: checkout source code
         run: |
-          ssh -i private_key_file -o IdentitiesOnly=yes' 
+          GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repository
           git clone $repository
       - name: checkout source code
         run: |
