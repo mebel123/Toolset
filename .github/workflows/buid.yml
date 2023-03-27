@@ -28,7 +28,7 @@ jobs:
           ls
       - name: create docker
         run: |
-          sh createDocker.sh
+          sh ./createDocker.sh
       - name: cleanup
         run: |
           cd ..
