@@ -26,15 +26,12 @@ jobs:
         run: |
           cd examenisnode
           ls
+          pwd
       - name: create docker
         run: |
-          rm ./config/system/configMYSQLDB.js
-          rm ./config/system/configLDAP.js
-          cp ./config/system/customer/docker/configMYSQLDB.js ./config/system/configMYSQLDB.js
-          cp ./config/system/customer/docker/configLDAP.js ./config/system/configLDAP.js
-          
-          docker build -t registry.edologic.de/examenis-node-server .
-          docker push registry.edologic.de/examenis-node-server
+          chmod +x createDocker.sh
+          ./createDocker.sh
+        shell: bash
       - name: cleanup
         run: |
           cd ..
