@@ -22,7 +22,15 @@ jobs:
       - name: checkout source code
         run: |
           GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repository
-      - name: checkout source code
+      - name: check source code
         run: |
+          cd examenisnode
           ls
+      - name: create docker
+        run: |
+          sh createDocker.sh
+      - name: cleanup
+        run: |
+          cd ..
+          rm -rf examenisnode
           
