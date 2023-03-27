@@ -15,7 +15,7 @@ jobs:
       sshKey: ${{ secrets.EDO_JENKINS }}
       repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
     name: Build image
-    runs-on: debian-latest
+    runs-on: [ self-hosted, edo ]
     steps:
       - name: checkout source code
         run: |
