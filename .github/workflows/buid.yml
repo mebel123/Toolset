@@ -1,0 +1,17 @@
+name: Examenis Build Node Server
+
+jobs:
+  build:
+    env:
+      sshKey: ${{ secrets.EDO_JENKINS }}
+      repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
+    name: Build image
+    steps:
+      - name: checkout source code
+        run: |
+          echo $sshKey > private_key_file
+      - name: checkout source code
+        run: |
+          ssh -i private_key_file -o IdentitiesOnly=yes' 
+          git clone $repository
+          
