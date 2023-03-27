@@ -29,11 +29,12 @@ jobs:
           pwd
       - name: create docker
         run: |
+          pwd
+          cd examenisnode
           chmod +x createDocker.sh
           ./createDocker.sh
         shell: bash
       - name: cleanup
         run: |
-          cd ..
           rm -rf examenisnode
           
