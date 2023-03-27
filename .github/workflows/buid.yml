@@ -15,6 +15,7 @@ jobs:
       sshKey: ${{ secrets.EDO_JENKINS }}
       repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
     name: Build image
+    runs-on: debian-latest
     steps:
       - name: checkout source code
         run: |
@@ -23,4 +24,7 @@ jobs:
         run: |
           ssh -i private_key_file -o IdentitiesOnly=yes' 
           git clone $repository
+      - name: checkout source code
+        run: |
+          sh createDocker.sh
           
