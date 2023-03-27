@@ -21,10 +21,7 @@ jobs:
           echo "hello world"
       - name: checkout source code
         run: |
-          mkdir temp
-          cd temp
           GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repository
-          git clone $repository
       - name: checkout source code
         run: |
           ls
