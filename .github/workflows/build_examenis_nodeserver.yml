@@ -16,7 +16,7 @@ jobs:
       repositoryParticipantClient: ${{ secrets.EXAMENIS_REPO_CLIENT_PARTICIPANT }}
       sshpwd: ${{ secrets.SSH_PWD }}
     name: Build image
-    runs-on: [ self-hosted, edo ]
+    runs-on: [ self-hosted ]
     steps:
       - name: prepare hello world
         continue-on-error: true
