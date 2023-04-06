@@ -13,7 +13,7 @@ jobs:
       name: ${{ github.event.inputs.environment || 'prod' }}
     env:
       repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
-      repository: ${{ secrets.EXAMENIS_REPO_CLIENT_PARTICIPANT }}
+      repositoryParticipantClient: ${{ secrets.EXAMENIS_REPO_CLIENT_PARTICIPANT }}
     name: Build image
     runs-on: [ self-hosted, edo ]
     steps:
@@ -22,7 +22,7 @@ jobs:
           echo "hello world"
       - name: checkout source code of examenis participant client
         run: |
-          GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryClient
+          GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
       - name: checkout source code
         run: |
           GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repository
