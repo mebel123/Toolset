@@ -22,7 +22,7 @@ jobs:
         continue-on-error: true
         run: |
           eval `ssh-agent -s`
-          ssh-add ~/.ssh/edoJenkins.ppk -p 
+          ssh-add ~/.ssh/edoJenkins.ppk -p $sshpwd
           echo "hello world"
           rm -rf examenisClientParticipant
           rm -rf examenisnode
