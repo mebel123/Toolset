@@ -16,6 +16,7 @@ jobs:
       repositoryParticipantClient: ${{ secrets.EXAMENIS_REPO_CLIENT_PARTICIPANT }}
       sshkey: ${{ secrets.SSH_KEY }}
       sshpwd: ${{ secrets.SSH_PWD }}
+      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
     name: Build image
     runs-on: [ self-hosted ]
     steps:
@@ -37,11 +38,12 @@ jobs:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ env.sshkey }}
           name: id_rsa # optional
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
-          # config: ${{ secrets.CONFIG }} # ssh_config; optional
-          if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
+          known_hosts: ${{ env.KNOWN_HOSTS }}
+          config: |
+            StrictHostKeyChecking no
+          if_key_exists: replace # replace / ignore / fail; optional (defaults to fail)
       - name: checkout source code of examenis participant client
         # GIT_SSH_COMMAND='ssh -i edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
         run: |
