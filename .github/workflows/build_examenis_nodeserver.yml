@@ -35,19 +35,20 @@ jobs:
           echo "hello world"
           rm -rf examenisClientParticipant
           rm -rf examenisnode
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+      - uses: cardoe/ssh-agent-deploy-key@v1
         with:
-          key: ${{ env.sshkey }}
-          name: id_rsa # optional
-          known_hosts: ${{ env.KNOWN_HOSTS }}
-          config: |
-            StrictHostKeyChecking no
-          if_key_exists: replace # replace / ignore / fail; optional (defaults to fail)
+          # SSH private keys to load into the ssh-agent
+          ssh-private-key: |
+            ${{ secrets.SSH_KEY }}
+
+          # Known hosts in addition to the user and global host key database. The
+          # public SSH keys for a host may be obtained using the utility
+          # `ssh-keyscan`. For example, `ssh-keyscan github.com`.
+          ssh-known-hosts: ${{secrets,KNOWN_HOSTS}}
       - name: checkout source code of examenis participant client
         # GIT_SSH_COMMAND='ssh -i edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
         run: |
-          GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
+          git clone $repositoryParticipantClient
       - name: checkout source code
         run: |
           GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes' git clone git clone $repository
