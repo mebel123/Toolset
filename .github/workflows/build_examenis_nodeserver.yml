@@ -18,8 +18,11 @@ jobs:
     runs-on: [ self-hosted, edo ]
     steps:
       - name: prepare hello world
+        continue-on-error: true
         run: |
           echo "hello world"
+          rm -rf examenisClientParticipant
+          rm -rf examenisnode
       - name: checkout source code of examenis participant client
         run: |
           GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
