@@ -29,6 +29,7 @@ jobs:
           echo "$sshkey" > edoJenkins.ppk
           ls -rtl
           more edoJenkins.ppk
+          chmod 600 edoJenkins.ppk
           eval `ssh-agent -s`
           echo "hello world"
           rm -rf examenisClientParticipant
