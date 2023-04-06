@@ -47,10 +47,10 @@ jobs:
       - name: checkout source code of examenis participant client
         # GIT_SSH_COMMAND='ssh -i edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
         run: |
-          git clone $repositoryParticipantClient
+          GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
       - name: checkout source code
         run: |
-          git clone $repository
+          GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes' git clone git clone $repository
       - uses: actions/setup-node@v1
         continue-on-error: true
         with:
