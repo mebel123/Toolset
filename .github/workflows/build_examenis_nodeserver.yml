@@ -38,16 +38,17 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_KEY }}
-          # name: id_rsa # optional
+          name: id_rsa # optional
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
           # config: ${{ secrets.CONFIG }} # ssh_config; optional
           if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
       - name: checkout source code of examenis participant client
+        # GIT_SSH_COMMAND='ssh -i edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
         run: |
-          GIT_SSH_COMMAND='ssh -i edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
+          git clone $repositoryParticipantClient
       - name: checkout source code
         run: |
-          GIT_SSH_COMMAND='ssh -i edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repository
+          git clone $repository
       - uses: actions/setup-node@v1
         continue-on-error: true
         with:
