@@ -14,12 +14,15 @@ jobs:
     env:
       repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
       repositoryParticipantClient: ${{ secrets.EXAMENIS_REPO_CLIENT_PARTICIPANT }}
+      sshpwd: ${{ secrets.SSH_PWD }}
     name: Build image
     runs-on: [ self-hosted, edo ]
     steps:
       - name: prepare hello world
         continue-on-error: true
         run: |
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/edoJenkins.ppk -p 
           echo "hello world"
           rm -rf examenisClientParticipant
           rm -rf examenisnode
