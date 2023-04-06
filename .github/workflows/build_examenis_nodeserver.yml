@@ -20,18 +20,10 @@ jobs:
     name: Build image
     runs-on: [ self-hosted ]
     steps:
-      - name: install xclip
-        continue-on-error: true
-        run: |
-          yum install xclip
       - name: prepare hello world
         continue-on-error: true
         run: |
-          echo "$sshkey" > edoJenkins.ppk
           ls -rtl
-          more edoJenkins.ppk
-          chmod 600 edoJenkins.ppk
-          eval `ssh-agent -s`
           echo "hello world"
           rm -rf examenisClientParticipant
           rm -rf examenisnode
@@ -43,12 +35,11 @@ jobs:
           ssh-known-hosts: |
             ${{secrets.KNOWN_HOSTS}}
       - name: checkout source code of examenis participant client
-        # GIT_SSH_COMMAND='ssh -i edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
         run: |
           git clone $repositoryParticipantClient
       - name: checkout source code
         run: |
-          GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes' git clone git clone $repository
+          git clone git clone $repository
       - uses: actions/setup-node@v1
         continue-on-error: true
         with:
