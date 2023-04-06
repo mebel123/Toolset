@@ -20,6 +20,11 @@ jobs:
       - name: prepare hello world
         run: |
           echo "hello world"
+      - name: Setup SSH
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: github.com
+          private-key: ${{ secrets.EDO_JENKINS }}
       - name: checkout source code of examenis participant client
         run: |
           GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repositoryParticipantClient
