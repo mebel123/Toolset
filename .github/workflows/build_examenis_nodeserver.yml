@@ -39,7 +39,7 @@ jobs:
           git clone $repositoryParticipantClient
       - name: checkout source code
         run: |
-          git clone git clone $repository
+          git clone $repository
       - uses: actions/setup-node@v1
         continue-on-error: true
         with:
