@@ -57,8 +57,8 @@ jobs:
         run: |
           pwd
           cd examenisnode
-          chmod +x createDocker.sh
-          ./createDocker.sh
+          chmod +x createDockerCI.sh
+          ./createDockerCI.sh
         shell: bash
       - name: cleanup
         run: |
