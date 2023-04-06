@@ -1,4 +1,4 @@
-name: Examenis Build Node Server
+name: Examenis Build Server
 on:
   workflow_dispatch:
     inputs:
@@ -12,8 +12,8 @@ jobs:
     environment:
       name: ${{ github.event.inputs.environment || 'prod' }}
     env:
-      repository: ${{ secrets.EXAMENIS_REPO_NODE_SERVER }}
-      repositoryParticipantClient: ${{ secrets.EXAMENIS_REPO_CLIENT_PARTICIPANT }}
+      repositoryServer: ${{ secrets.EXAMENIS_REPO_SERVER }}
+      repositoryClient: ${{ secrets.EXAMENIS_REPO_CLIENT }}
       sshkey: ${{ secrets.SSH_KEY }}
       sshpwd: ${{ secrets.SSH_PWD }}
       KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
@@ -34,12 +34,12 @@ jobs:
             ${{secrets.SSH_KEY}}
           ssh-known-hosts: |
             ${{secrets.KNOWN_HOSTS}}
-      - name: checkout source code of examenis participant client
+      - name: checkout source code of examenis client
         run: |
-          git clone $repositoryParticipantClient
+          git clone $repositoryClient
       - name: checkout source code
         run: |
-          git clone $repository
+          git clone $repositoryServer
       - uses: actions/setup-node@v1
         continue-on-error: true
         with:
@@ -48,15 +48,17 @@ jobs:
       - name: create participant client
         run: |
           ls
-          cd examenisClientParticipant
+          cd vueexamenis
+          cd sources
           ls
           pwd
-          chmod +x createProdCI.sh
-          ./createProdCI.sh
-      - name: create participant node server docker
+          chmod +x createLocalCI.sh
+          ./createLocalCI.sh
+      - name: create examenis server docker
         run: |
           pwd
-          cd examenisnode
+          cd examenis
+          cd sources
           chmod +x createDockerCI.sh
           ./createDockerCI.sh
         shell: bash
