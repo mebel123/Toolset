@@ -58,7 +58,6 @@ jobs:
         run: |
           pwd
           cd examenis
-          cd sources
           chmod +x createDockerCI.sh
           ./createDockerCI.sh
         shell: bash
