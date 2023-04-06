@@ -29,6 +29,11 @@ jobs:
       - name: checkout source code
         run: |
           GIT_SSH_COMMAND='ssh -i /home/ghrunner/edoJenkins.ppk -o IdentitiesOnly=yes' git clone $repository
+      - uses: actions/setup-node@v1
+          continue-on-error: true
+          with:
+            node-version: 14
+            registry-url: https://registry.npmjs.org/
       - name: create participant client
         run: |
           ls
