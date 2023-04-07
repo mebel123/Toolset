@@ -16,6 +16,7 @@ jobs:
       sshkey: ${{ secrets.SSH_KEY }}
       sshpwd: ${{ secrets.SSH_PWD }}
       KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+      BUILD_NUMER: ${{ github.run_number }}
     name: Build image
     runs-on: [ self-hosted ]
     steps:
@@ -45,7 +46,12 @@ jobs:
           cd sources
           echo "Creates the prod build"
           rm ./src/config.js
-          cp ./src/config_prod.js ./src/config.js
+          now=$(date +"%d.%m.%Y")
+          buildNumber=$BUILD_NUMER
+          sed 's/vvv/8.'${buildNumber}'/g' ./src/config_prod.js > m01.txt
+          sed 's/ddd/'${now}'/g' m01.txt > ./src/config.js
+          
+          more ./src/config.js
           
           npm install
           npm run build
