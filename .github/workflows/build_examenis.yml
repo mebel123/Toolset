@@ -43,8 +43,12 @@ jobs:
           rm ./conf/routes
           mv ./conf/routes_prod ./conf/routes
           rm -r ./public/vue-examenis
-          tar xf /srv/buildfolder/vuexamenis.tar -C ./public/vue-examenis
-          ls -rtl ./public/vue-examenis
+          cd ./public/vue-examenis
+          tar -xf /srv/buildfolder/vuexamenis.tar --strip-components=2
+          ls
+          cd ./../..
+          pwd
+          ls
           
           docker build -t registry.edologic.de/examenis23:latest .
           docker push registry.edologic.de/examenis23:latest

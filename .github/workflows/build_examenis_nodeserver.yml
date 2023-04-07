@@ -17,7 +17,7 @@ jobs:
       sshkey: ${{ secrets.SSH_KEY }}
       sshpwd: ${{ secrets.SSH_PWD }}
       KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
-    name: Build image
+    name: Build Node Server
     runs-on: [ self-hosted ]
     steps:
       - name: prepare hello world
