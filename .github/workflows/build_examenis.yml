@@ -43,7 +43,7 @@ jobs:
           rm ./conf/routes
           mv ./conf/routes_prod ./conf/routes
           rm -rf ./public/vue-examenis
-          mkdir /public/vue-examenis
+          mkdir ./public/vue-examenis
           cd ./public/vue-examenis
           tar -xf /srv/buildfolder/vuexamenis.tar --strip-components=2
           ls
