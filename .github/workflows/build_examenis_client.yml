@@ -1,4 +1,4 @@
-name: Examenis Build Server
+name: Examenis Build Client
 on:
   workflow_dispatch:
     inputs:
@@ -12,7 +12,7 @@ jobs:
     environment:
       name: ${{ github.event.inputs.environment || 'prod' }}
     env:
-      repositoryServer: ${{ secrets.EXAMENIS_REPO_SERVER }}
+      repositoryClient: ${{ secrets.EXAMENIS_REPO_CLIENT }}
       sshkey: ${{ secrets.SSH_KEY }}
       sshpwd: ${{ secrets.SSH_PWD }}
       KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
@@ -22,7 +22,7 @@ jobs:
       - name: prepare hello world
         continue-on-error: true
         run: |
-          rm -rf examenis
+          rm -rf vueexamenis
       - uses: cardoe/ssh-agent-deploy-key@v1
         with:
           # SSH private keys to load into the ssh-agent
@@ -30,23 +30,24 @@ jobs:
             ${{secrets.SSH_KEY}}
           ssh-known-hosts: |
             ${{secrets.KNOWN_HOSTS}}
-      - name: checkout source code
+      - name: checkout source code of client
         run: |
-          git clone $repositoryServer
-      - name: create examenis server docker
+          git clone $repositoryClient
+      - uses: actions/setup-node@v1
+        continue-on-error: true
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - name: create participant client
         run: |
-          pwd
           ls
-          cd examenis
-          rm ./conf/application.conf
-          mv ./conf/application_fhdo.conf ./conf/application.conf
-          rm ./conf/routes
-          mv ./conf/routes_prod ./conf/routes
-          rm -r ./public/vue-examenis
-          tar xf /srv/buildfolder/vuexamenis.tar -C ./public/vue-examenis
-          ls -rtl ./public/vue-examenis
+          cd vueexamenis
+          cd sources
+          echo "Creates the prod build"
+          rm ./src/config.js
+          cp ./src/config_prod.js ./src/config.js
           
-          docker build -t registry.edologic.de/examenis23:latest .
-          docker push registry.edologic.de/examenis23:latest
-        shell: bash
-
+          npm install
+          npm run build
+          
+          tar -cvf /srv/buildfolder/vuexamenis.tar ./dist
