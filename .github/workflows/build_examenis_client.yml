@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: 14
           registry-url: https://registry.npmjs.org/
-      - name: create participant client
+      - name: create examenis client
         run: |
           ls
           cd vueexamenis
