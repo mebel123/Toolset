@@ -41,8 +41,9 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: create ds client
         run: |
-          ls
           pwd
+          cd cmclient
+          ls
           cd sources/kermaxcm
           rm ./src/config.js
           
