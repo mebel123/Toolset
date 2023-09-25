@@ -43,12 +43,13 @@ jobs:
         run: |
           cd cmserver
           pwd
+          mkdir logs
+          mkdir public
+          
           ls
           mv /srv/buildfolder/kermaxcm.tar ./public/kermaxcm.tar
           tar -xf ./public/kermaxcm.tar --strip-components=2
-          
-          mkdir logs
-          
+                    
           rm ./config/customer/configAPI.js
           mv ./config/customer/customer/docker/configAPI.js ./config/customer/configAPI.js
           
