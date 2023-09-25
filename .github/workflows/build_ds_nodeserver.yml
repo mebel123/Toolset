@@ -48,7 +48,9 @@ jobs:
           
           ls
           mv /srv/buildfolder/kermaxcm.tar ./public/kermaxcm.tar
-          tar -xf ./public/kermaxcm.tar --strip-components=2
+          cd public
+          tar -xf kermaxcm.tar --strip-components=2
+          cd ..
                     
           rm ./config/customer/configAPI.js
           mv ./config/customer/customer/docker/configAPI.js ./config/customer/configAPI.js
