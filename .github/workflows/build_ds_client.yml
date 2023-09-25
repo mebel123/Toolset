@@ -1,0 +1,58 @@
+name: Client Build DS
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy Environment: [prod]'
+        required: true
+        default: 'prod'
+
+jobs:
+  build:
+    environment:
+      name: ${{ github.event.inputs.environment || 'prod' }}
+    env:
+      repositoryClient: ${{ secrets.KERMAX_REPO_CLIENT }}
+      sshkey: ${{ secrets.SSH_KEY }}
+      sshpwd: ${{ secrets.SSH_PWD }}
+      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+      BUILD_NUMER: ${{ github.run_number }}
+    name: Build image
+    runs-on: [ self-hosted ]
+    steps:
+      - name: prepare hello world
+        continue-on-error: true
+        run: |
+          rm -rf sources
+      - uses: cardoe/ssh-agent-deploy-key@v1
+        with:
+          # SSH private keys to load into the ssh-agent
+          ssh-private-key: |
+            ${{secrets.SSH_KEY}}
+          ssh-known-hosts: |
+            ${{secrets.KNOWN_HOSTS}}
+      - name: checkout source code of client
+        run: |
+          git clone $repositoryClient
+      - uses: actions/setup-node@v1
+        continue-on-error: true
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - name: create ds client
+        run: |
+          ls
+          pwd
+          cd sources/kermaxcm
+          rm ./src/config.js
+          
+          BUILD_NUMBER=$(date '+%d%m%M')
+          BUILD_DATE=$(date '+%d.%m.%Y')
+          sed 's/vvv/'$BUILD_NUMBER'/g' ./src/config_docker.js > ./src/c.js
+          sed 's/ddd/'$BUILD_DATE'/g' ./src/c.js > ./src/config.js
+          
+          
+          npm install
+          npm run build
+       
+          tar -cvf /srv/buildfolder/kermaxcm.tar ./dist
