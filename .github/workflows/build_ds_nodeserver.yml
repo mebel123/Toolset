@@ -1,0 +1,51 @@
+name: Build Node Server DS
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy Environment: [prod]'
+        required: true
+        default: 'prod'
+
+jobs:
+  build:
+    environment:
+      name: ${{ github.event.inputs.environment || 'prod' }}
+    env:
+      repository: ${{ secrets.KERMAX_REPO_NODE_SERVER }}
+      sshkey: ${{ secrets.SSH_KEY }}
+      sshpwd: ${{ secrets.SSH_PWD }}
+      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+    name: Build Node Server
+    runs-on: [ self-hosted ]
+    steps:
+      - name: prepare hello world
+        continue-on-error: true
+        run: |
+          ls -rtl
+          echo "hello world"
+          rm -rf examenisClientParticipant
+          rm -rf examenisnode
+      - uses: cardoe/ssh-agent-deploy-key@v1
+        with:
+          # SSH private keys to load into the ssh-agent
+          ssh-private-key: |
+            ${{secrets.SSH_KEY}}
+          ssh-known-hosts: |
+            ${{secrets.KNOWN_HOSTS}}
+      - name: checkout source code
+        run: |
+          git clone $repository
+      - uses: actions/setup-node@v1
+        continue-on-error: true
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - name: create node server docker
+        run: |
+          pwd
+          cd examenisnode
+          chmod +x createDockerCI.sh
+          ./createDockerCI.sh
+        shell: bash
+
