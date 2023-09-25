@@ -47,7 +47,7 @@ jobs:
           mkdir public
           
           ls
-          mv /srv/buildfolder/kermaxcm.tar ./public/kermaxcm.tar
+          cp /srv/buildfolder/kermaxcm.tar ./public/kermaxcm.tar
           cd public
           tar -xf kermaxcm.tar --strip-components=2
           cd ..
