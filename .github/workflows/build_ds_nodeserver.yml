@@ -54,7 +54,6 @@ jobs:
           rm ./config/customer/configAPI.js
           mv ./config/customer/customer/docker/configAPI.js ./config/customer/configAPI.js
           
-          mv ./dist ./public
           cd docker
           cp Dockerfile ./../
           more Dockerfile
