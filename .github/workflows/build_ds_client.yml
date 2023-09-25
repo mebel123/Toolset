@@ -23,7 +23,7 @@ jobs:
       - name: prepare hello world
         continue-on-error: true
         run: |
-          rm -rf sources
+          rm -rf cmclient
       - uses: cardoe/ssh-agent-deploy-key@v1
         with:
           # SSH private keys to load into the ssh-agent
