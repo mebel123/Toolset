@@ -43,9 +43,26 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: create node server docker
         run: |
+          cd cmserver
           pwd
-          cd examenisnode
-          chmod +x createDockerCI.sh
-          ./createDockerCI.sh
+          ls
+          mv /srv/buildfolder/kermaxcm.tar ./public/kermaxcm.tar
+          tar -xf ./public/kermaxcm.tar --strip-components=2
+          
+          mkdir logs
+          
+          rm ./config/customer/configAPI.js
+          mv ./config/customer/customer/docker/configAPI.js ./config/customer/configAPI.js
+          
+          mv ./dist ./public
+          cd docker
+          cp Dockerfile ./../
+          more Dockerfile
+          cd ..
+          echo "or use on docker build --no-cache "
+          docker build -t mebel/kmserver2023 . --no-cache
+          
+          docker tag mebel/kmserver2023 registry.edologic.de/kmserver
+          docker push registry.edologic.de/kmserver
         shell: bash
 
