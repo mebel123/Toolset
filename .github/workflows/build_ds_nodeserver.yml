@@ -60,7 +60,7 @@ jobs:
           more Dockerfile
           cd ..
           echo "or use on docker build --no-cache "
-          docker build -t mebel/kmserver2023 . --no-cache
+          docker build -t mebel/kmserver2023 . 
           
           docker tag mebel/kmserver2023 registry.edologic.de/kmserver
           docker push registry.edologic.de/kmserver
