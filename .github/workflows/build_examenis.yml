@@ -1,5 +1,8 @@
 name: Examenis Build Server
 on:
+  workflow_run:
+    workflows:
+      - 'Examenis Build Client'
   workflow_dispatch:
     inputs:
       environment:

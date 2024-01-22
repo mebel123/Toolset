@@ -1,5 +1,8 @@
-name: Build Node Server DS
+name: Client Build DS
 on:
+  workflow_run:
+    workflows:
+      - 'Examenis Build Client'
   workflow_dispatch:
     inputs:
       environment:
