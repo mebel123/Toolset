@@ -1,8 +1,8 @@
-name: Client Build DS
+name: DS Build Nodeserver
 on:
   workflow_run:
     workflows:
-      - 'Examenis Build Client'
+      - 'DS Build Client'
     types:
       - completed
   workflow_dispatch:

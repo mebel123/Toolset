@@ -1,4 +1,4 @@
-name: Client Build DS
+name: DS Build Client
 on:
   workflow_dispatch:
     inputs:
