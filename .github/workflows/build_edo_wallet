@@ -1,0 +1,61 @@
+name: Examenis Build Server
+on:
+  workflow_run:
+    workflows:
+      - 'Examenis Build Client'
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy Environment: [prod]'
+        required: true
+        default: 'prod'
+
+jobs:
+  build:
+    environment:
+      name: ${{ github.event.inputs.environment || 'prod' }}
+    env:
+      repositoryServer: ${{ secrets.EDOWALLET_SERVER }}
+      sshkey: ${{ secrets.SSH_KEY }}
+      sshpwd: ${{ secrets.SSH_PWD }}
+      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+    name: Build image
+    runs-on: [ self-hosted ]
+    steps:
+      - name: prepare hello world
+        continue-on-error: true
+        run: |
+          rm -rf edowallet
+      - uses: cardoe/ssh-agent-deploy-key@v1
+        with:
+          # SSH private keys to load into the ssh-agent
+          ssh-private-key: |
+            ${{secrets.SSH_KEY}}
+          ssh-known-hosts: |
+            ${{secrets.KNOWN_HOSTS}}
+      - name: checkout source code
+        run: |
+          git clone $repositoryServer
+      - name: create examenis server docker
+        run: |
+          pwd
+          ls
+          cd examenis
+          rm ./conf/application.conf
+          mv ./conf/application_fhdo.conf ./conf/application.conf
+          rm ./conf/routes
+          mv ./conf/routes_prod ./conf/routes
+          rm -rf ./public/vue-examenis
+          mkdir ./public/vue-examenis
+          cd ./public/vue-examenis
+          tar -xf /srv/buildfolder/vuexamenis.tar --strip-components=2
+          ls
+          cd ./../..
+          pwd
+          ls
+          
+          docker build -t registry.edologic.de/examenis23:latest .
+          docker push registry.edologic.de/examenis23:latest
+        shell: bash
