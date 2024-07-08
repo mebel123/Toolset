@@ -17,8 +17,10 @@ jobs:
       name: ${{ github.event.inputs.environment || 'prod' }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Install MariaDB client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mariadb-client-10.3
 
       - name: Run backup script
         env:
