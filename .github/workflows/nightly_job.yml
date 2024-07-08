@@ -9,15 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Run backup script
-      run: |
-        cd /mnt/volumeWoohoo01/backup
-        bash doBackup.sh
+      - name: Run backup script
+        env:
+          BACKUP_PATH: ${{ secrets.BACKUP_PATH }}
+        run: |
+          cd $BACKUP_PATH
+          bash doBackup.sh 
 
-    - name: Remove old files
-      run: |
-        cd /mnt/volumeWoohoo01/backup/old
-        find . -type f -mtime +7 -exec rm {} \;
+      - name: Remove old files
+        env:
+          BACKUP_PATH: ${{ secrets.BACKUP_PATH }}
+        run: |
+          cd $BACKUP_PATH/old
+          find . -type f -mtime +7 -exec rm {} \;
