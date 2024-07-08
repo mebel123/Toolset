@@ -11,9 +11,10 @@ on:
         default: 'prod'
 
 jobs:
-  backup:
+  build:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment || 'prod' }}
+    environment:
+      name: ${{ github.event.inputs.environment || 'prod' }}
 
     steps:
       - name: Checkout repository
