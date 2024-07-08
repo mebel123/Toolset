@@ -24,6 +24,7 @@ jobs:
         env:
           BACKUP_PATH: ${{ secrets.BACKUP_PATH }}
         run: |
+          ls /srv/buildfolder
           ls /backup
           ls /backup/mysql
           ls $BACKUP_PATH
