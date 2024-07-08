@@ -3,6 +3,7 @@ name: Nightly Backup
 on:
   schedule:
     - cron: '0 0 * * *' # Runs every night at midnight
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   backup:
