@@ -1,0 +1,23 @@
+name: Nightly Backup
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every night at midnight
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run backup script
+      run: |
+        cd /mnt/volumeWoohoo01/backup
+        bash doBackup.sh
+
+    - name: Remove old files
+      run: |
+        cd /mnt/volumeWoohoo01/backup/old
+        find . -type f -mtime +7 -exec rm {} \;
