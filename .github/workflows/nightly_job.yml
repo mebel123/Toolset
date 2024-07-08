@@ -18,6 +18,8 @@ jobs:
           BACKUP_PATH: ${{ secrets.BACKUP_PATH }}
         run: |
           cd $BACKUP_PATH
+          pwd
+          ls
           bash doBackup.sh 
 
       - name: Remove old files
