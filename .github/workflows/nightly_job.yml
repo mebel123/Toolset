@@ -23,6 +23,7 @@ jobs:
         env:
           BACKUP_PATH: ${{ secrets.BACKUP_PATH }}
         run: |
+          echo $BACKUP_PATH
           cd $BACKUP_PATH
           pwd
           ls
