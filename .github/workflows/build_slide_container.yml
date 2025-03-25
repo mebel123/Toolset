@@ -44,6 +44,7 @@ jobs:
       - name: create server
         run: |
           ls
+          cd slide-deck
           cd server
           docker build -t mebel/slidedeckserver24 .
           
