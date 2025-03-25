@@ -35,6 +35,7 @@ jobs:
       - name: create client
         run: |
           ls
+          cd slide-deck
           cd client
           docker build -t mebel/slidedeck24 .
           
