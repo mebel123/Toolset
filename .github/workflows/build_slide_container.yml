@@ -15,6 +15,7 @@ jobs:
       repositoryClient: ${{ secrets.SLIDE_DECK_REPO_CLIENT }}
       sshkey: ${{ secrets.SSH_KEY }}
       sshpwd: ${{ secrets.SSH_PWD }}
+      config: ${{ secrets.SD_CONFIG }}
       KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
       BUILD_NUMER: ${{ github.run_number }}
     name: Build image
@@ -37,6 +38,8 @@ jobs:
           ls
           cd slide-deck
           cd client
+          rm ./src/js/config.js
+          echo $config > ./src/js/config.js
           docker build -t mebel/slidedeck24 .
           
           docker tag mebel/slidedeck24 registry.edologic.de/slidedeck24
