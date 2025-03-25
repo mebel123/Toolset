@@ -1,0 +1,57 @@
+name: Slide Deck Build Container
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy Environment: [prod]'
+        required: true
+        default: 'prod'
+
+jobs:
+  build:
+    environment:
+      name: ${{ github.event.inputs.environment || 'prod' }}
+    env:
+      repositoryClient: ${{ secrets.SLIDE_DECK_REPO_CLIENT }}
+      sshkey: ${{ secrets.SSH_KEY }}
+      sshpwd: ${{ secrets.SSH_PWD }}
+      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+      BUILD_NUMER: ${{ github.run_number }}
+    name: Build image
+    runs-on: [ self-hosted ]
+    steps:
+      - name: prepare hello world
+        continue-on-error: true
+        run: |
+          rm -rf slide-deck
+      - uses: cardoe/ssh-agent-deploy-key@v1
+        with:
+          # SSH private keys to load into the ssh-agent
+          ssh-private-key: |
+            ${{secrets.SSH_KEY}}
+          ssh-known-hosts: |
+            ${{secrets.KNOWN_HOSTS}}
+      - name: checkout source code of client
+        run: |
+          git clone $repositoryClient
+      - uses: actions/setup-node@v1
+        continue-on-error: true
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - name: create client
+        run: |
+          ls
+          cd client
+          docker build -t mebel/slidedeck24 .
+          
+          docker tag mebel/slidedeck24 registry.edologic.de/slidedeck24
+          docker push registry.edologic.de/slidedeck24
+      - name: create server
+        run: |
+          ls
+          cd server
+          docker build -t mebel/slidedeckserver24 .
+          
+          docker tag mebel/slidedeckserver24 registry.edologic.de/slidedeckserver24
+          docker push registry.edologic.de/slidedeckserver24
