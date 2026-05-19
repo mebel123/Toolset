@@ -39,7 +39,7 @@ jobs:
       - name: Clone repository
         run: |
           set -euo pipefail
-          git clone "$REPOSITORY" edosec
+          git clone "$REPOSITORY"
           cd edosec
           git checkout "${GITHUB_SHA}"
 
