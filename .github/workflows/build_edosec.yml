@@ -39,7 +39,7 @@ jobs:
       - name: Clone repository
         run: |
           set -euo pipefail
-          git clone $repository
+          git clone "$REPOSITORY"
 
       - name: Show build metadata
         run: |
