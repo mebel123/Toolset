@@ -39,9 +39,7 @@ jobs:
       - name: Clone repository
         run: |
           set -euo pipefail
-          git clone "$REPOSITORY"
-          cd edosec
-          git checkout "${GITHUB_SHA}"
+          git clone $repository
 
       - name: Show build metadata
         run: |
