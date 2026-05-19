@@ -1,4 +1,4 @@
-name: Build Edosec container
+name: Build container
 on:
   workflow_dispatch:
     inputs:
