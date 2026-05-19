@@ -1,37 +1,101 @@
-name: Build container
+name: Build edoSec Containers
+
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deploy Environment: [prod]'
+        description: "Deploy environment"
         required: true
-        default: 'prod'
+        default: "prod"
+      image_tag:
+        description: "Docker tag for all built images"
+        required: true
+        default: "0.1"
 
 jobs:
-  build:
+  build-and-push:
+    name: Build and push all runtime containers
+    runs-on: [self-hosted]
     environment:
       name: ${{ github.event.inputs.environment || 'prod' }}
     env:
-      repository: ${{ secrets.EDOSEC_REPO }}
-      sshkey: ${{ secrets.SSH_KEY }}
-      sshpwd: ${{ secrets.SSH_PWD }}
+      REPOSITORY: ${{ secrets.EDOSEC_REPO }}
       KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
-      BUILD_NUMBER: ${{ github.run_number }}
-    name: Build image
-    runs-on: [ self-hosted ]
+      IMAGE_TAG: ${{ github.event.inputs.image_tag || '0.1' }}
+      REGISTRY_PREFIX: registry.edologic.de/edosec
+
     steps:
-      - name: prepare hello world
-        continue-on-error: true
-        run: |
-          rm -rf edosec
-      - uses: cardoe/ssh-agent-deploy-key@v1
+      - name: Prepare workspace
+        run: rm -rf edosec
+
+      - name: Load SSH deploy key
+        uses: cardoe/ssh-agent-deploy-key@v1
         with:
-          # SSH private keys to load into the ssh-agent
           ssh-private-key: |
-            ${{secrets.SSH_KEY}}
+            ${{ secrets.SSH_KEY }}
           ssh-known-hosts: |
-            ${{secrets.KNOWN_HOSTS}}
-      - name: checkout source code of client
+            ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Clone repository
         run: |
-          git clone $repository
-      
+          set -euo pipefail
+          git clone "$REPOSITORY" edosec
+          cd edosec
+          git checkout "${GITHUB_SHA}"
+
+      - name: Show build metadata
+        run: |
+          set -euo pipefail
+          cd edosec
+          echo "environment=${{ github.event.inputs.environment || 'prod' }}"
+          echo "image_tag=${IMAGE_TAG}"
+          echo "commit=$(git rev-parse HEAD)"
+
+      - name: Build and push frontend
+        run: |
+          set -euo pipefail
+          cd edosec/frontend/edosec
+          docker build \
+            -t "${REGISTRY_PREFIX}/voice-frontend:${IMAGE_TAG}" \
+            .
+          docker push "${REGISTRY_PREFIX}/voice-frontend:${IMAGE_TAG}"
+
+      - name: Build and push api-server
+        run: |
+          set -euo pipefail
+          cd edosec/go-agent
+          docker build \
+            -f Dockerfile.api \
+            -t "${REGISTRY_PREFIX}/voice-api-server:${IMAGE_TAG}" \
+            .
+          docker push "${REGISTRY_PREFIX}/voice-api-server:${IMAGE_TAG}"
+
+      - name: Build and push voice-agent
+        run: |
+          set -euo pipefail
+          cd edosec/go-agent
+          docker build \
+            -f Dockerfile.agent \
+            -t "${REGISTRY_PREFIX}/voice-agent:${IMAGE_TAG}" \
+            .
+          docker push "${REGISTRY_PREFIX}/voice-agent:${IMAGE_TAG}"
+
+      - name: Build and push runner-agent
+        run: |
+          set -euo pipefail
+          cd edosec/go-agent
+          docker build \
+            -f Dockerfile.runner \
+            -t "${REGISTRY_PREFIX}/runner-agent:${IMAGE_TAG}" \
+            .
+          docker push "${REGISTRY_PREFIX}/runner-agent:${IMAGE_TAG}"
+
+      - name: Build and push db-migrate
+        run: |
+          set -euo pipefail
+          cd edosec/go-agent
+          docker build \
+            -f Dockerfile.migration \
+            -t "${REGISTRY_PREFIX}/db-migrate:${IMAGE_TAG}" \
+            .
+          docker push "${REGISTRY_PREFIX}/db-migrate:${IMAGE_TAG}"
