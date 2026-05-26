@@ -32,7 +32,7 @@ jobs:
         uses: cardoe/ssh-agent-deploy-key@v1
         with:
           ssh-private-key: |
-            ${{ secrets.SSH_KEY }}
+            ${{ secrets.SSH_KEY_EDOLOGIC }}
           ssh-known-hosts: |
             ${{ secrets.KNOWN_HOSTS_EDOLOGIC }}
 
