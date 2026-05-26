@@ -36,6 +36,10 @@ jobs:
           ssh-known-hosts: |
             ${{ secrets.KNOWN_HOSTS_EDOLOGIC }}
 
+      - name: Debug SSH
+        run: |
+          ssh -vvv -T git@git.edologic.de -p 2222 || true
+
       - name: Clone repository
         run: |
           set -euo pipefail
