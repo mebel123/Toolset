@@ -20,7 +20,7 @@ jobs:
       name: ${{ github.event.inputs.environment || 'prod' }}
     env:
       REPOSITORY: ${{ secrets.EDOSEC_REPO }}
-      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS_EDOLOGIC }}
       IMAGE_TAG: ${{ github.event.inputs.image_tag || '0.1' }}
       REGISTRY_PREFIX: registry.edologic.de/edosec
 
@@ -34,7 +34,7 @@ jobs:
           ssh-private-key: |
             ${{ secrets.SSH_KEY }}
           ssh-known-hosts: |
-            ${{ secrets.KNOWN_HOSTS }}
+            ${{ secrets.KNOWN_HOSTS_EDOLOGIC }}
 
       - name: Clone repository
         run: |
