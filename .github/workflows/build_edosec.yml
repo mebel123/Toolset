@@ -28,13 +28,15 @@ jobs:
       - name: Prepare workspace
         run: rm -rf edosec
 
-      - name: Load SSH deploy key
-        uses: cardoe/ssh-agent-deploy-key@v1
-        with:
-          ssh-private-key: |
-            ${{ secrets.SSH_KEY_EDOLOGIC }}
-          ssh-known-hosts: |
-            ${{ secrets.KNOWN_HOSTS_EDOLOGIC }}
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+
+          echo "${{ secrets.SSH_KEY_EDOLOGIC }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          echo "${{ secrets.KNOWN_HOSTS_EDOLOGIC }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
       - name: Debug SSH
         run: |
